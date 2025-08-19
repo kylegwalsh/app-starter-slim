@@ -1,0 +1,45 @@
+---
+globs: apps/backend/**/*
+alwaysApply: false
+---
+
+<!-- markdownlint-disable MD041 MD040 MD033 -->
+
+<backend_overview>
+
+- Serverless backend using SST (AWS), Hono (routing), tRPC (typed APIs), Prisma (ORM), Zod (validation), Better Auth (auth), and superjson (serialization).
+
+</backend_overview>
+
+<backend_structure>
+
+```text
+apps/backend/
+  core/                       # Backend helpers (auth, shared logic)
+    auth.ts                   # Better Auth config/helpers
+    index.ts                  # Common exports
+  db/                         # Database layer (Prisma)
+    connect.ts                # Prisma connection helper
+    index.ts                  # DB client export
+    schema.prisma             # Prisma schema
+  routes/                     # tRPC domain routers (queries/mutations)
+    index.ts                  # Root router; composes routers; exports AppRouter
+    sheet.ts                  # Sheet methods (Zod-validated, Prisma-backed)
+    task.ts                   # Task methods (Zod-validated, Prisma-backed)
+    trpc/                     # tRPC setup
+      init.ts                 # initTRPC + superjson + OpenApiMeta
+      context.ts              # ctx (e.g., user) from Better Auth session cookies
+      middleware.ts           # timeProcedure and isAuthed guards
+      procedures.ts           # publicProcedure and protectedProcedure
+      error.ts                # Error mapping/utilities
+  functions/                  # Hono handlers / Lambda entrypoints
+    api.ts                    # Mounts /trpc, /api (OpenAPI), /docs (Swagger)
+    auth.ts                   # Auth function(s)
+  scripts/                    # Utilities and DB scripts
+    add-secret.ts
+    get-deb-url.ts
+  sst-env.d.ts
+  tsconfig.json
+```
+
+</backend_structure>

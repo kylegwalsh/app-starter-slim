@@ -1,0 +1,49 @@
+---
+alwaysApply: true
+---
+
+<!-- markdownlint-disable MD041 MD040 MD033 -->
+
+<monorepo_overview>
+
+App Starter monorepo for building applications with shared packages and serverless infrastructure. All code is TypeScript. Managed with pnpm workspaces and Turborepo; deployed with SST to AWS.
+
+</monorepo_overview>
+
+<tech_stack>
+
+- pnpm (workspaces)
+- Turborepo (build/test/lint orchestration)
+- SST on AWS (infrastructure + local dev shell)
+- Supabase (Postgres)
+- Prisma (ORM)
+- Next.js (frontend)
+- Node.js + TypeScript (backend and shared)
+
+</tech_stack>
+
+<repository_structure>
+
+```text
+/
+├── apps/
+│   ├── web/           # Next.js app (frontend)
+│   ├── backend/       # Serverless backend (SST, Hono, tRPC, Prisma)
+├── packages/
+│   ├── config/        # Shared configuration + env
+│   ├── eslint/        # Shared ESLint config
+│   ├── tsconfig/      # Shared TypeScript configs
+│   ├── design/        # Design system (shadcn-based UI, providers)
+│   ├── schemas/       # Shared Zod schemas
+│   ├── constants/     # Shared constants
+│   └── utils/         # Shared utilities
+├── infra/             # SST app + stacks (e.g., web, api, secrets)
+├── scripts/           # Repo-level scripts and tooling
+├── templates/         # Scaffolding templates (e.g., package)
+├── sst.config.ts      # SST entrypoint
+├── package.json       # Root scripts (turbo, sst)
+├── pnpm-workspace.yaml
+└── ...
+```
+
+</repository_structure>

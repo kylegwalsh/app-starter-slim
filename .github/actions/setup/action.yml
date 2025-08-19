@@ -1,0 +1,64 @@
+# A composite action that sets up the CI environment for all jobs
+name: 'Set up environment'
+description: 'Common setup steps for all jobs'
+inputs:
+  job-name:
+    description: 'Name of the job using this action (for cache differentiation)'
+    required: false
+    default: 'default'
+runs:
+  using: 'composite'
+  steps:
+    # Basic setup steps
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'pnpm'
+
+    - name: Configure AWS CLI
+      shell: bash
+      run: |
+        aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID --profile default
+        aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY --profile default
+        aws configure set default.region us-west-1
+
+    # Restore some of the cached dependencies we generated during the setup job
+    - name: Restore dependencies
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          node_modules
+          apps/*/node_modules
+          packages/*/node_modules
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        fail-on-cache-miss: true
+
+    - name: Restore SST providers
+      uses: actions/cache/restore@v4
+      with:
+        path: .sst
+        key: ${{ runner.os }}-sst-providers-
+        fail-on-cache-miss: true
+
+    # Set up a cache for the turbo results
+    - name: Cache Turbo
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ inputs.job-name }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-${{ inputs.job-name }}-
+          ${{ runner.os }}-turbo-
+
+    # Generate some of the types we'll need
+    - name: Generate Prisma client
+      shell: bash
+      run: pnpm run backend db:generate
+
+    - name: Generate docs types
+      shell: bash
+      run: pnpm run docs postinstall

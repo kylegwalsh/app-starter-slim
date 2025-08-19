@@ -1,0 +1,58 @@
+{
+  "name": "@repo/backend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sst dev",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "test": "sst shell -- vitest run",
+    "test:ci": "sst shell --stage ci -- vitest run",
+    "test:ui": "sst shell -- vitest --ui",
+    "remove": "sst remove",
+    "console": "sst console",
+    "auth:generate": "sst shell -- pnpm dlx @better-auth/cli generate --config ./core/auth.ts --output ./db/schema.prisma",
+    "db:start": "pnpm db:get-url \"prisma db push && prisma studio --browser none\"",
+    "db:push": "pnpm db:get-url \"prisma db push\"",
+    "db:migrate": "tsx ./scripts/migrations/create-migration.ts",
+    "db:migrate:deploy": "pnpm db:get-url \"prisma migrate deploy\"",
+    "db:migrate:validate": "pnpm db:get-url \"tsx ./scripts/migrations/validate-migration.ts\"",
+    "db:studio": "pnpm db:get-url \"prisma studio\"",
+    "db:generate": "prisma generate",
+    "db:get-url": "tsx ./scripts/get-deb-url.ts",
+    "add-secret": "tsx ./scripts/add-secret.ts",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "pretty": "prettier --write . --ignore-path ../../.prettierignore",
+    "format": "pnpm lint:fix & pnpm pretty",
+    "types:check": "tsc --noEmit",
+    "types:generate": "tsc --emitDeclarationOnly",
+    "postinstall": "pnpm db:generate"
+  },
+  "devDependencies": {
+    "@repo/eslint": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/node": "^20",
+    "sqlite3": "^5.1.7"
+  },
+  "dependencies": {
+    "@better-auth/stripe": "^1.2.12",
+    "@prisma/client": "^6.7.0",
+    "@repo/config": "workspace:*",
+    "@repo/constants": "workspace:*",
+    "@repo/utils": "workspace:*",
+    "@trpc/server": "11.2.0",
+    "better-auth": "^1.2.12",
+    "better-trpc-openapi": "github:kylegwalsh/trpc-openapi#69359b66b170d3a251aa4aca5f832ab25b93fa7f",
+    "hono": "^4.8.4",
+    "prisma": "^6.7.0",
+    "sst": "3.17.10",
+    "stripe": "^18.4.0",
+    "superjson": "^2.2.2",
+    "zod": "3.25.46"
+  },
+  "prisma": {
+    "schema": "db/schema.prisma"
+  }
+}
