@@ -82,7 +82,7 @@ _All packages and apps are written in TypeScript for consistency and type safety
 │   ├── config/        # Shared configuration
 │   ├── eslint/        # Shared ESLint config
 │   ├── tsconfig/      # Shared TypeScript config
-│   ├── design/ # Shared design system (React)
+│   ├── design/        # Shared design system (React)
 │   ├── schemas/       # Shared schemas (forms + validation)
 │   ├── logs/          # Shared logging package (uses pino)
 │   └── ...            # (More packages can be added)
@@ -108,7 +108,6 @@ _All packages and apps are written in TypeScript for consistency and type safety
 - **scripts/**: Helper scripts for setup and development.
 - **.github/**: CI/CD workflows and automation.
 - **templates/**: Templates for scaffolding new projects or packages.
-- **prompts/**: Prompt files for AI or automation.
 
 > **Note:** Each app or package includes its own README with more details.
 
